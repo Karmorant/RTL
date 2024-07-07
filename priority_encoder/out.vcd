@@ -1,0 +1,46 @@
+$date
+	Sun Jul  7 12:44:23 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module testbench $end
+$var wire 3 ! num [2:0] $end
+$var reg 8 " vector [7:0] $end
+$scope module DUT $end
+$var wire 8 # vector [7:0] $end
+$var wire 3 $ num [2:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b111 $
+b10100110 #
+b10100110 "
+b111 !
+$end
+#10000
+b1 !
+b1 $
+b10 "
+b10 #
+#20000
+b101 !
+b101 $
+b111000 "
+b111000 #
+#30000
+b111 !
+b111 $
+b11111111 "
+b11111111 #
+#40000
+b0 !
+b0 $
+b1 "
+b1 #
+#50000
