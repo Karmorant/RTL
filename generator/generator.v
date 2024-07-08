@@ -4,11 +4,8 @@ module generator(
         output reg OUT
 );
 
-reg [2:0] counter;
-initial begin
-        counter = 0;
-        OUT = 0;
-end
+reg [2:0] counter = 3'b000;
+
 
 always @(posedge clk) begin
         if (reset) begin
