@@ -5,13 +5,8 @@ module clk_div_6(
         output reg  clk_div_4,
         output reg  clk_div_6
 );
-reg [2:0] counter;
-initial begin
-        counter   = 0;
-        clk_div_2 = 0;
-        clk_div_4 = 0;
-        clk_div_6 = 0;
-end
+reg [2:0] counter = 3'b000;
+
 
 
 
