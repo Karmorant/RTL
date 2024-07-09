@@ -4,8 +4,6 @@
 module testbench;
 reg clk;
 reg reset;
-wire clk_div_2;
-wire clk_div_4;
 wire clk_div_6;
 
 
@@ -19,8 +17,6 @@ always #1 clk = ~clk;
 clk_div_6 DUT  (
         .clk(clk),
         .reset(reset),
-        .clk_div_2(clk_div_2),
-        .clk_div_4(clk_div_4),
         .clk_div_6(clk_div_6)
 );
 

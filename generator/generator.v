@@ -13,12 +13,14 @@ always @(posedge clk) begin
                 OUT <= 0;
         end
         else begin
-                OUT <= 0;
                 if (counter == 4) begin
                         counter <= 0;
                         OUT <= 1;
                 end
-                else counter = counter + 1;
+                else begin
+                        counter <= counter + 1;
+                        OUT <= 0;
+                end
         end
 end
 
