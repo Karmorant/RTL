@@ -4,7 +4,7 @@ module generator(
         output reg OUT
 );
 
-reg [2:0] counter = 3'b000;
+reg [2:0] counter;
 
 
 always @(posedge clk) begin

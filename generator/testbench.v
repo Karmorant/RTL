@@ -22,6 +22,11 @@ generator DUT(
 initial begin
         $dumpfile("out.vcd");
         $dumpvars(0, testbench);
+        #10;
+        reset = 1;
+        #2;
+        reset = 0;
+        
         #1000;
 
 
