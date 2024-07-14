@@ -10,7 +10,7 @@ initial begin
 $dumpfile("out.vcd");
 $dumpvars(0,testbench);
 
-	in = 8'b00000001;
+	in = 8'b00000100;
 	#10;
 
 	in = 8'b00000010;

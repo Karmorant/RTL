@@ -2,9 +2,9 @@
 
 module testbench;
 reg  [2:0] digit;
-wire [7:0] vector;
+wire [7:0] vector; 
 
-decoder_shift DUT (digit, vector);
+decoder_parall DUT (digit, vector);
 
 initial begin
 	$dumpfile("out.vcd");

@@ -1,5 +1,5 @@
 $date
-	Fri Jul  5 18:41:50 2024
+	Fri Jul 12 14:22:48 2024
 $end
 $version
 	Icarus Verilog
@@ -11,8 +11,8 @@ $scope module testbench $end
 $var wire 8 ! vector [7:0] $end
 $var reg 3 " digit [2:0] $end
 $scope module DUT $end
-$var wire 3 # digit [2:0] $end
-$var wire 8 $ vector [7:0] $end
+$var wire 3 # in [2:0] $end
+$var wire 8 $ out [7:0] $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
