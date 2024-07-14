@@ -4,7 +4,7 @@
 module testbench;
 reg clk;
 reg reset;
-wire OUT;
+reg OUT;
 
 
 initial begin
@@ -16,8 +16,7 @@ always #1 clk = ~clk;
 
 generator DUT(
         .clk(clk),
-        .reset(reset),
-        .OUT(OUT)
+        .reset(reset)
 );
 initial begin
         $dumpfile("out.vcd");
