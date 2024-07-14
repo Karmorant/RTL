@@ -1,0 +1,88 @@
+$date
+	Sun Jul 14 18:30:19 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module testbench $end
+$var wire 3 ! pow [2:0] $end
+$var reg 8 " in [7:0] $end
+$scope module DUT $end
+$var wire 8 # in [7:0] $end
+$var wire 8 $ onehot_rev [7:0] $end
+$var wire 3 % pow [2:0] $end
+$var wire 8 & onehot [7:0] $end
+$var wire 8 ' in_rev [7:0] $end
+$scope begin loop_1[0] $end
+$upscope $end
+$scope begin loop_1[1] $end
+$upscope $end
+$scope begin loop_1[2] $end
+$upscope $end
+$scope begin loop_1[3] $end
+$upscope $end
+$scope begin loop_1[4] $end
+$upscope $end
+$scope begin loop_1[5] $end
+$upscope $end
+$scope begin loop_1[6] $end
+$upscope $end
+$scope begin loop_1[7] $end
+$upscope $end
+$scope begin loop_2[0] $end
+$upscope $end
+$scope begin loop_2[1] $end
+$upscope $end
+$scope begin loop_2[2] $end
+$upscope $end
+$scope begin loop_2[3] $end
+$upscope $end
+$scope begin loop_2[4] $end
+$upscope $end
+$scope begin loop_2[5] $end
+$upscope $end
+$scope begin loop_2[6] $end
+$upscope $end
+$scope begin loop_2[7] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b100010 '
+b1000000 &
+b110 %
+b10 $
+b1000100 #
+b1000100 "
+b110 !
+$end
+#10000
+b111 !
+b111 %
+b10000000 &
+b1 $
+b1011111 '
+b11111010 "
+b11111010 #
+#20000
+b0 !
+b0 %
+b1 &
+b10000000 $
+b10000000 '
+b1 "
+b1 #
+#30000
+b100 !
+b100 %
+b10000 &
+b1000 $
+b1000 '
+b10000 "
+b10000 #
+#40000
