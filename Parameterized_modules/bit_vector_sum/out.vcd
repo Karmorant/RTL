@@ -1,0 +1,42 @@
+$date
+	Sun Jul 14 22:43:18 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module testbench $end
+$var reg 8 ! data [7:0] $end
+$scope module DUT $end
+$var wire 8 " data [7:0] $end
+$var wire 4 # sum [3:0] $end
+$scope function bit_sum $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bx #
+bx "
+bx !
+$end
+#10000
+b10 #
+b10001 !
+b10001 "
+#20000
+b100 #
+b1100110 !
+b1100110 "
+#30000
+b11 #
+b11001000 !
+b11001000 "
+#40000
+b10 #
+b11 !
+b11 "
+#50000
