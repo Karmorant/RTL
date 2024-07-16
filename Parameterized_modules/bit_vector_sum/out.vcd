@@ -1,5 +1,5 @@
 $date
-	Sun Jul 14 22:43:18 2024
+	Tue Jul 16 16:44:43 2024
 $end
 $version
 	Icarus Verilog
@@ -12,7 +12,41 @@ $var reg 8 ! data [7:0] $end
 $scope module DUT $end
 $var wire 8 " data [7:0] $end
 $var wire 4 # sum [3:0] $end
-$scope function bit_sum $end
+$scope begin loop_1[0] $end
+$scope begin genblk2 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[1] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[2] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[3] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[4] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[5] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[6] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[7] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[8] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $upscope $end
 $upscope $end

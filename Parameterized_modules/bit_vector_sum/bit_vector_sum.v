@@ -8,20 +8,19 @@ module bit_vector_sum
         output wire [POS_W     :0] sum
 );
 
+wire [POS_W:0] tmp [DATA_W:0];
 
 
-
-function [POS_W:0] bit_sum;
-        input [DATA_W - 1:0] data_in;
-        integer i;
-        begin
-                bit_sum = 0;
-                for (i = 0; i < DATA_W; i = i + 1) begin
-                        bit_sum = bit_sum + data_in[i];
-                end
+genvar i;
+generate for (i = 0; i <= DATA_W; i = i + 1)
+begin: loop_1
+        if (i == 0) assign tmp[i] = 'h0;
+        else begin
+                assign tmp[i] = (data[i - 1]) ? (tmp[i - 1] + 'h1) : tmp[i - 1];
         end
-endfunction
+end
+endgenerate
 
-assign sum = bit_sum(data);
+assign sum = tmp[DATA_W];
 
 endmodule
