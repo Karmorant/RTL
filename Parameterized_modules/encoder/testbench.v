@@ -5,7 +5,7 @@ module testbench;
 reg  [7:0] in;
 wire [2:0] pow;
 
-encoder #(.IN_SIZE(8)) DUT (
+encoder_paral #(.IN_SIZE(8)) DUT (
         .in(in),
         .pow(pow)
 );

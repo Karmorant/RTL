@@ -1,5 +1,5 @@
 $date
-	Sun Jul 14 18:03:43 2024
+	Thu Jul 18 23:23:11 2024
 $end
 $version
 	Icarus Verilog
@@ -14,20 +14,40 @@ $scope module DUT $end
 $var wire 8 # in [7:0] $end
 $var wire 3 $ pow [2:0] $end
 $scope begin loop_1[0] $end
+$scope begin genblk2 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[1] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[2] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[3] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[4] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[5] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[6] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $scope begin loop_1[7] $end
+$scope begin genblk3 $end
+$upscope $end
+$upscope $end
+$scope begin loop_1[8] $end
+$scope begin genblk3 $end
+$upscope $end
 $upscope $end
 $upscope $end
 $upscope $end
