@@ -97,10 +97,7 @@ initial begin
         data_in = 8'b10000000;
         #2;
         write = 0;
-        reset = 1;
-        #2;
-        reset = 0;
-        
+
 
 
 
