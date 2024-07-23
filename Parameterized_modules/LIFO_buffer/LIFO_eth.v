@@ -14,7 +14,7 @@ module LIFO_eth
         output wire full
 );
 
-reg [LIFO_SIZE      -1  :0] buffer [DATA_W - 1:0];
+reg [DATA_W         -1  :0] buffer [LIFO_SIZE - 1:0];
 reg [$clog2(LIFO_SIZE)  :0] cntr;
 
 genvar Gi;
