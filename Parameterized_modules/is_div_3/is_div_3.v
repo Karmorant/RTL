@@ -3,55 +3,32 @@ module is_div_3
         parameter SIZE = 8
 )
 (
-        input  wire [SIZE - 1:0] digit,
-        output wire out
+        input  wire [SIZE - 1         : 0] digit,
+        output wire [$clog2(SIZE) - 1 : 0] out
 );
 
 
-function automatic isdiv3;
-        input [SIZE - 1:0] digit_in;
-        reg   [$clog2(SIZE):0] counter_even;
-        reg   [$clog2(SIZE):0] counter_odd;
-        integer i, g;
-        begin
-                counter_even = 0;
-                counter_odd = 0;
 
-                for (i = 0; i < SIZE; i = i + 2) begin
-                        counter_even = (digit_in[i]) ? counter_even + 1 : counter_even;
-                end
-                for (g = 1; g < SIZE; g = g + 2) begin
-                        counter_odd = (digit_in[g]) ? counter_odd + 1 : counter_odd;
-                end
-                if (counter_even > counter_odd) begin
-                        if (((counter_even - counter_odd) == 3)) begin
-                                isdiv3 = 1;
-                        end
-                        else if ((counter_even - counter_odd) == 1 || 2) begin
-                                isdiv3 = 0;
-                        end
-                        else begin
-                                isdiv3 = isdiv3(counter_even - counter_odd);
-                        end
-                end
-                else if (counter_even < counter_odd) begin
-                        if (((counter_odd - counter_even) == 3)) begin
-                                isdiv3 = 1;
-                        end
-                        else if ((counter_odd - counter_even) == 1 || 2) begin
-                                isdiv3 = 0;
-                        end
-                        else begin
-                                isdiv3 = isdiv3(counter_odd - counter_even);
-                        end
-                end
-                else begin
-                        isdiv3 = 1;
-                end
-                
-        end
-endfunction
+wire [$clog2(SIZE) - 1:0] counter [SIZE : 0];
+//wire [$clog2(SIZE) - 1:0] counter[SIZE/2 - 1:0];
 
-assign out = isdiv3(digit);
+ 
+genvar i;
+generate for(i = 0; i < SIZE; i = i + 2)
+begin: loop_1
+        if (i == 0) assign counter[i] = digit[i];
+        else assign counter[i] = counter[i - 2] + digit[i];
+end
+endgenerate
+ 
+genvar g;
+generate for(g = 1; g < SIZE; g = g + 2)
+begin: loop_2
+        if (g == 1) assign counter[g] = digit[g];
+        else assign counter[g] = counter[g - 2] + digit[g];
+end
+endgenerate
 
+assign out =    (counter[SIZE - 1] > counter[SIZE - 2]) ? counter[SIZE - 1] - counter[SIZE - 2] :
+                counter[SIZE - 2] - counter[SIZE - 1];
 endmodule
