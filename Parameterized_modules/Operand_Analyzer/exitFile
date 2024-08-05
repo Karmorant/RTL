@@ -1,0 +1,45 @@
+#! /usr/bin/vvp
+:ivl_version "11.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/system.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/va_math.vpi";
+S_0x60ed64476d90 .scope module, "operand_analyzer" "operand_analyzer" 2 1;
+ .timescale 0 0;
+    .port_info 0 /INPUT 64 "digit";
+    .port_info 1 /OUTPUT 64 "out_digit";
+    .port_info 2 /OUTPUT 1 "op_val";
+    .port_info 3 /OUTPUT 1 "NAN";
+    .port_info 4 /OUTPUT 1 "INF";
+    .port_info 5 /OUTPUT 1 "ZERO";
+P_0x60ed64476f20 .param/l "DATA_W" 0 2 3, +C4<00000000000000000000000001000000>;
+o0x79f52b0e8018 .functor BUFZ 1, C4<z>; HiZ drive
+L_0x60ed644c2340 .functor OR 1, L_0x60ed644c2910, o0x79f52b0e8018, C4<0>, C4<0>;
+L_0x60ed644c23d0 .functor NOT 1, L_0x60ed644c2340, C4<0>, C4<0>, C4<0>;
+o0x79f52b0e8138 .functor BUFZ 64, C4<zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>; HiZ drive
+L_0x60ed644c2470 .functor BUFZ 64, o0x79f52b0e8138, C4<0000000000000000000000000000000000000000000000000000000000000000>, C4<0000000000000000000000000000000000000000000000000000000000000000>, C4<0000000000000000000000000000000000000000000000000000000000000000>;
+L_0x60ed644c2910 .functor AND 1, L_0x60ed644c26d0, L_0x60ed644c27f0, C4<1>, C4<1>;
+v0x60ed64477060_0 .net "INF", 0 0, o0x79f52b0e8018;  0 drivers
+v0x60ed644c1a30_0 .net "NAN", 0 0, L_0x60ed644c2910;  1 drivers
+o0x79f52b0e8078 .functor BUFZ 1, C4<z>; HiZ drive
+v0x60ed644c1af0_0 .net "ZERO", 0 0, o0x79f52b0e8078;  0 drivers
+v0x60ed644c1b90_0 .net *"_ivl_0", 0 0, L_0x60ed644c2340;  1 drivers
+v0x60ed644c1c70_0 .net *"_ivl_11", 0 0, L_0x60ed644c26d0;  1 drivers
+v0x60ed644c1d80_0 .net *"_ivl_13", 0 0, L_0x60ed644c27f0;  1 drivers
+v0x60ed644c1e40_0 .net "digit", 63 0, o0x79f52b0e8138;  0 drivers
+v0x60ed644c1f20_0 .net "exp", 7 0, L_0x60ed644c2510;  1 drivers
+v0x60ed644c2000_0 .net "mant", 54 0, L_0x60ed644c2630;  1 drivers
+v0x60ed644c20e0_0 .net "op_val", 0 0, L_0x60ed644c23d0;  1 drivers
+v0x60ed644c21a0_0 .net "out_digit", 63 0, L_0x60ed644c2470;  1 drivers
+L_0x60ed644c2510 .part o0x79f52b0e8138, 55, 8;
+L_0x60ed644c2630 .part o0x79f52b0e8138, 0, 55;
+L_0x60ed644c26d0 .reduce/and L_0x60ed644c2510;
+L_0x60ed644c27f0 .reduce/or L_0x60ed644c2630;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "operand_analyzer.v";
