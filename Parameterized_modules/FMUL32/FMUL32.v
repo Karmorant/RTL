@@ -119,13 +119,12 @@ exp_sum exp_sum
 );
 
 
-reg [62:0] first_stage;
+reg [2*(DATA_W - 9) + 16 : 0] first_stage;
 
 always @(posedge clk) begin
-        first_stage[62:40] <= out_A;
-        first_stage[39:17] <= out_B;
-        first_stage[16:12] <= {res_sign, res_val, res_NAN, res_INF, res_ZERO};
-        first_stage[11:0 ] <= {flow_bits, exp_degree, exp_res};
+        first_stage[2*(DATA_W - 9) + 16 : 2*(DATA_W - 9) + 12] <= {res_sign, res_val, res_NAN, res_INF, res_ZERO};
+        first_stage[2*(DATA_W - 9) + 11 : 2*(DATA_W - 9)     ] <= {flow_bits, exp_degree, exp_res};
+        first_stage[2*(DATA_W - 9) -  1 :                   0] <= {out_A, out_B};
 end
 
 
