@@ -38,6 +38,6 @@ endgenerate
 
 assign out =    (res[0] == 0 || res[0] == 3  ) ? 1 :
                 (res[$clog2(SIZE)/2 - 1] == 0) ? 1 :
-                (res[0]                      ) ? 0 : 0;
+                                                 0 ;
 
 endmodule
