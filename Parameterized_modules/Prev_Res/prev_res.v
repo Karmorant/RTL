@@ -21,16 +21,13 @@ module prev_res
         output wire res_ZERO
 );
 
+assign res_val = ~IDLE;
 
 
 assign res_sign = {MUL  } &   operand_A_sign ^ operand_B_sign  |
                   {INV_S} & ~(operand_A_sign ^ operand_B_sign) |
                   {ABS_W} &   1'b0                             ;
 
-assign res_val = (operand_A_val  && operand_B_ZERO ||
-                  operand_A_ZERO && operand_B_val  ||
-                  operand_A_ZERO && operand_B_ZERO ||
-                  operand_A_val  && operand_B_val);
 
 assign res_NAN = (operand_A_NAN  || operand_B_NAN  ||
                   operand_A_ZERO && operand_B_INF  ||

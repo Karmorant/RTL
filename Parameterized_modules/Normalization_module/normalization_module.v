@@ -1,24 +1,31 @@
 module normalization_module
 #(
-        parameter DATA_W = 8
+        parameter MANT_W = 8
 )
 (
-        input  wire [DATA_W - 1 : 0] vector,
-        output wire [DATA_W - 1 : 0] out
+        input  wire [MANT_W - 1     : 0] vector,
+        output wire [MANT_W - 1     : 0] out,
+        output wire [$clog2(MANT_W) : 0] leading_zero_num,
+        output wire                      exp_incr,
+        output wire                      not_full_norm
 );
 
-wire [$clog2(DATA_W): 0] counter;
+
 
 leading_zero_counter 
 #(
-        .DATA_W(DATA_W)
+        .DATA_W(MANT_W)
 ) leading_zero_counter_1
 (
         .vector(vector),
-        .zero_num(counter)
+        .zero_num(leading_zero_num)
 );
 
+assign exp_incr = (vector[MANT_W - 1 : MANT_W - 2] > 1);
 
-assign out = vector << counter;
+assign not_full_norm = (leading_zero_num > 1);
+
+
+assign out = vector << leading_zero_num;
 
 endmodule

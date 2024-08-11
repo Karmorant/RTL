@@ -1,0 +1,76 @@
+$date
+	Sun Aug 11 11:21:09 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module testbench $end
+$var reg 8 ! exp_A [7:0] $end
+$var reg 8 " exp_B [7:0] $end
+$scope module DUT $end
+$var wire 8 # exp_A [7:0] $end
+$var wire 8 $ exp_B [7:0] $end
+$var wire 10 % exp_res [9:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1 %
+b1000010 $
+b111110 #
+b1000010 "
+b111110 !
+$end
+#2000
+b0 %
+b1000001 "
+b1000001 $
+#4000
+b1111111111 %
+b1000000 "
+b1000000 $
+#6000
+b1111111110 %
+b111111 "
+b111111 $
+#8000
+b1111101001 %
+b101010 "
+b101010 $
+#10000
+b1111101000 %
+b101001 "
+b101001 $
+#12000
+b10000000 "
+b10000000 $
+b11111111 %
+b11111110 !
+b11111110 #
+#14000
+b101111101 %
+b11111110 "
+b11111110 $
+#16000
+b10111011 "
+b10111011 $
+b11111110 %
+b11000010 !
+b11000010 #
+#18000
+b11111111 "
+b11111111 $
+b101111111 %
+b11111111 !
+b11111111 #
+#20000
+b1 "
+b1 $
+b1111111 %
+b11111101 !
+b11111101 #
+#22000
