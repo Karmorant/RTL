@@ -37,7 +37,7 @@ assign res_INF = (operand_A_INF  && operand_B_INF ||
                   operand_A_INF  && operand_B_val ||
                   operand_A_val  && operand_B_INF );
 
-assign res_zero = (operand_A_ZERO && operand_B_ZERO ||
+assign res_ZERO = (operand_A_ZERO && operand_B_ZERO ||
                    operand_A_ZERO && operand_B_val  ||
                    operand_A_val  && operand_B_ZERO);
 

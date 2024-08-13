@@ -1,6 +1,6 @@
 module rounding_module
 #(
-        parameter MANT_W = 24
+        parameter MANT_W = 48
 )
 (
         input  wire                  sign_bit, 
@@ -10,9 +10,9 @@ module rounding_module
         output wire                  mant_overfl 
 );
 
-wire guard_bit    =  data[MANT_W - 1 - 23       ];
-wire rounding_bit =  data[MANT_W - 1 - 23 -1    ];
-wire sticky_bit   = |data[MANT_W - 1 - 23 -2 : 0];
+wire guard_bit    =  data[MANT_W - 1 - 22       ];
+wire rounding_bit =  data[MANT_W - 1 - 22 -1    ];
+wire sticky_bit   = |data[MANT_W - 1 - 22 -2 : 0];
 wire mant_incr    = rounding_bit & (guard_bit | sticky_bit); 
 
 

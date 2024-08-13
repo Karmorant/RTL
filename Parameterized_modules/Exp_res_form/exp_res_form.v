@@ -40,13 +40,13 @@ assign exp_fin = {8{prev_res[2] || prev_res[1]                      }} & {8{1'b1
                                                                       exp_res_tmp                                     ;
 
 
-assign mant_shift = ((denorm_shift <  2) && exp_change_pose          ) ? 8'b0                            :
-                    ((denorm_shift >= 2) && exp_change_pose          ) ? denorm_shift - exp_change_pose  :
-                    ( denorm_shift       && not_full_norm            ) ? denorm_shift + leading_zero_num :
-                    ( denorm_shift                                   ) ? denorm_shift                    :
+assign mant_shift = ((denorm_shift <  2) && exp_change_pose          ) ? 8'b0                                  :
+                    ((denorm_shift >= 2) && exp_change_pose          ) ? denorm_shift - exp_change_pose        :
+                    ( denorm_shift       && not_full_norm            ) ? denorm_shift + leading_zero_num       :
+                    ( denorm_shift                                   ) ? denorm_shift                          :
 
-                    (not_full_norm && exp_res_tmp <= leading_zero_num) ? leading_zero_num - exp_res_tmp  :
-                    (not_full_norm                                   ) ? 8'b0                            :
-                                                                         8'b0                            ;
+                    (not_full_norm && exp_res_tmp <= leading_zero_num) ? leading_zero_num - exp_res_tmp - 1'b1 :
+                    (not_full_norm                                   ) ? 8'b0                                  :
+                                                                         8'b0                                  ;
 
 endmodule
