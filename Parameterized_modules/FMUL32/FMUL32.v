@@ -10,6 +10,7 @@ module FMUL32
         input  wire [$clog2(OPERATION_NUM) - 1 : 0] opc,
         input  wire [1                         : 0] r_mode,
         output wire [31                        : 0] result,
+        output wire [7 : 0] mant_shift,
         output wire                                 val
 
 
@@ -17,9 +18,9 @@ module FMUL32
 
 
 wire [7          : 0] exp_A;
-wire [DATA_W - 9 : 0] mant_A;      //
+wire [DATA_W - 9 : 0] mant_A;      
 wire                  is_op_val_A;
-wire                  is_NAN_A;
+wire [1          : 0] is_NAN_A;
 wire                  is_INF_A;
 wire                  is_ZERO_A;
 
@@ -32,7 +33,7 @@ operand_analyzer
         .exp            (exp_A      ),
         .mant           (mant_A     ),
         .op_val         (is_op_val_A),
-        .NAN            (is_NAN_A   ),
+        .NANs           (is_NAN_A   ),
         .INF            (is_INF_A   ),
         .ZERO           (is_ZERO_A  )
 
@@ -40,9 +41,9 @@ operand_analyzer
 
 
 wire [7          : 0] exp_B;
-wire [DATA_W - 9 : 0] mant_B;    ////////
+wire [DATA_W - 9 : 0] mant_B;    
 wire                  is_op_val_B;
-wire                  is_NAN_B;
+wire [1          : 0] is_NAN_B;
 wire                  is_INF_B;
 wire                  is_ZERO_B;
 
@@ -55,7 +56,7 @@ operand_analyzer
         .exp            (exp_B      ),
         .mant           (mant_B     ),
         .op_val         (is_op_val_B),
-        .NAN            (is_NAN_B   ),
+        .NANs           (is_NAN_B   ),
         .INF            (is_INF_B   ),
         .ZERO           (is_ZERO_B  )
 
@@ -80,11 +81,11 @@ operation_analyzer
 );
 
 
-wire res_sign;                  //semd to reg  
-wire res_val;                   //semd to reg
-wire res_NAN;                   //semd to reg
-wire res_INF;                   //semd to reg
-wire res_ZERO;                  //semd to reg 
+wire         res_sign;                    
+wire         res_val;                   
+wire [1 : 0] res_NANs;                   
+wire         res_INF;                   
+wire         res_ZERO;                   
 
 prev_res prev_res
 (
@@ -104,13 +105,13 @@ prev_res prev_res
         .IDLE                   (IDLE           ),
         .res_sign               (res_sign       ),
         .res_val                (res_val        ),
-        .res_NAN                (res_NAN        ),
+        .res_NANs               (res_NANs       ),
         .res_INF                (res_INF        ),
         .res_ZERO               (res_ZERO       )
 );
 
 
-wire [9:0] exp_res;                     //send to reg
+wire [9:0] exp_res;                     
 
 exp_sum exp_sum
 (
@@ -125,28 +126,23 @@ exp_sum exp_sum
 reg [DATA_W - 9 : 0] mant_A_1ST;
 reg [DATA_W - 9 : 0] mant_B_1ST;
 reg [9          : 0] exp_res_1ST;
-reg [4          : 0] prev_res_1ST;
+reg [5          : 0] prev_res_1ST;
 reg [1          : 0] rounding_mode_1ST;
+reg [1          : 0] op_NAN_1ST;
 
 
 always @(posedge clk) begin
-        mant_A_1ST <= mant_A;
-end
+        mant_A_1ST        <= mant_A;
 
-always @(posedge clk) begin
-        mant_B_1ST <= mant_B;
-end
+        mant_B_1ST        <= mant_B;
 
-always @(posedge clk) begin
-        exp_res_1ST <= exp_res;
-end
+        exp_res_1ST       <= exp_res;
 
-always @(posedge clk) begin
-        prev_res_1ST <= {res_sign, res_val, res_NAN, res_INF, res_ZERO};
-end
+        prev_res_1ST      <= {res_sign, res_val, res_NANs, res_INF, res_ZERO};
 
-always @(posedge clk) begin
         rounding_mode_1ST <= r_mode;
+
+        op_NAN_1ST        <= {|is_NAN_A, |is_NAN_B};
 end
 
 wire [7:0] denorm_shift;
@@ -177,41 +173,41 @@ mant_mul
 
 
 reg [7                  : 0] exp_res_2ST;
-reg [4                  : 0] prev_res_2ST;
+reg [5                  : 0] prev_res_2ST;
 reg [1                  : 0] rounding_mode_2ST;
 reg [7                  : 0] denorm_shift_2ST;
 reg [1                  : 0] exp_condition_2ST;
 reg [2*(DATA_W - 8) - 1 : 0] prev_mant_res_2ST;
+reg [1                  : 0] op_NAN_2ST;
+reg [22                 : 0] mant_A_2ST;
+reg [22                 : 0] mant_B_2ST;
 
 
-always @(posedge clk) begin
-        exp_res_2ST <= exp_res_1ST[7:0];
-end
-
-always @(posedge clk) begin
-        prev_res_2ST <= prev_res_1ST;
-end
 
 always @(posedge clk) begin
+        exp_res_2ST       <= exp_res_1ST[7:0];
+
+        prev_res_2ST      <= prev_res_1ST;
+
         rounding_mode_2ST <= rounding_mode_1ST;
-end
 
-always @(posedge clk) begin
-        denorm_shift_2ST <= denorm_shift;
-end
+        denorm_shift_2ST  <= denorm_shift;
 
-always @(posedge clk) begin
         exp_condition_2ST <= {prev_inf, prev_overflow};
-end
 
-always @(posedge clk) begin
         prev_mant_res_2ST <= prev_mant_res;
+
+        op_NAN_2ST        <= op_NAN_1ST;
+
+        mant_A_2ST        <= mant_A_1ST;
+
+        mant_B_2ST        <= mant_B_1ST;
 end
 
-wire [2*(DATA_W - 8) - 1     : 0] mant_norm;
-wire [$clog2(2*(DATA_W - 8)) : 0] leading_zero_num;
-wire                              exp_incr;
-wire                              not_full_norm;
+wire [2*(DATA_W - 8) - 1         : 0] mant_norm;
+wire [$clog2(2*(DATA_W - 8)) - 1 : 0] leading_zero_num;
+wire                                  exp_incr;
+wire                                  not_full_norm;
 
 normalization_module
 #(
@@ -219,13 +215,18 @@ normalization_module
 ) normalization_module
 (
         .vector                 (prev_mant_res_2ST),
+        .exp_condition          (exp_condition_2ST),
+        .denorm_shift           (denorm_shift_2ST ),
+        .exp_change_pose        (exp_change_pose  ),
+        .exp_res_tmp            (exp_res_2ST      ),
         .out                    (mant_norm        ),
         .leading_zero_num       (leading_zero_num ),
         .exp_incr               (exp_incr         ),
+        .mant_shift(mant_shift),
         .not_full_norm          (not_full_norm    )
 );
 
-wire [23 : 0] mant_rounded;
+wire [22 : 0] mant_rounded;
 wire          mant_overfl;
 
 rounding_module
@@ -233,8 +234,11 @@ rounding_module
         .MANT_W                 (2*(DATA_W - 8)   )
 ) rounding_module
 (
-        .sign_bit               (prev_res_2ST[4]  ),
+        .sign_bit               (prev_res_2ST[5]  ),
         .rouding_mode           (rounding_mode_2ST),
+        .mant_A                 (mant_A_2ST       ),
+        .mant_B                 (mant_B_2ST       ),
+        .op_NAN                 (op_NAN_2ST       ),
         .data                   (mant_norm        ),
         .mant                   (mant_rounded     ),
         .mant_overfl            (mant_overfl      )
@@ -242,7 +246,7 @@ rounding_module
 
 
 wire [7 : 0] exp_fin;
-wire [7 : 0] mant_shift;
+wire [1 : 0] exp_change_pose;
 
 
 
@@ -252,26 +256,20 @@ exp_res_form
 ) exp_res_form
 (
         .exp_res_tmp            (exp_res_2ST        ),
-        .prev_res               (prev_res_2ST[2 : 0]),
+        .prev_res               (prev_res_2ST[3 : 0]),
         .denorm_shift           (denorm_shift_2ST   ),
         .exp_condition          (exp_condition_2ST  ),
         .leading_zero_num       (leading_zero_num   ),
         .exp_incr               (exp_incr           ),
         .not_full_norm          (not_full_norm      ),
         .mant_overfl            (mant_overfl        ),
-        .exp_fin                (exp_fin            ),
-        .mant_shift             (mant_shift         )
+        .exp_change_pose        (exp_change_pose    ),
+        .exp_fin                (exp_fin            )
 );
 
-rez_former rez_former
-(
-        .res_sign       (prev_res_2ST[4]),
-        .exp_fin        (exp_fin        ),
-        .mant_shift     (mant_shift     ),
-        .mant           (mant_rounded   ),
-        .res            (result         )
-);
 
-assign val = prev_res_2ST[3];
+assign result = {32{|prev_res_2ST[3 : 2]}} & {prev_res_2ST[3], exp_fin, mant_rounded} | 
+                                             {prev_res_2ST[5], exp_fin, mant_rounded} ;
+assign val    =  prev_res_2ST[4];
 
 endmodule

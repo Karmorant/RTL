@@ -3,8 +3,8 @@ module leading_zero_counter
         parameter DATA_W = 8
 )
 (
-        input  wire [DATA_W - 1    : 0] vector,
-        output wire [$clog2(DATA_W): 0] zero_num
+        input  wire [DATA_W - 1        : 0] vector,
+        output wire [$clog2(DATA_W) - 1: 0] zero_num
 );
 
 wire [$clog2(DATA_W): 0] counter [DATA_W - 1 : 0];
