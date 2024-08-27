@@ -9,7 +9,8 @@ module operand_analyzer
         output wire                  op_val,
         output wire [1          : 0] NANs,
         output wire                  INF,
-        output wire                  ZERO
+        output wire                  ZERO,
+        output wire                  DENORM
 );
 
 wire NAN;

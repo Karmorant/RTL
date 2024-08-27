@@ -10,7 +10,8 @@ module FMUL32
         input  wire [$clog2(OPERATION_NUM) - 1 : 0] opc,
         input  wire [1                         : 0] r_mode,
         output wire [31                        : 0] result,
-        output wire [7 : 0] mant_shift,
+        output wire [9 : 0] mant_shift,
+        output wire [4 : 0] a,
         output wire                                 val
 
 
@@ -24,18 +25,21 @@ wire [1          : 0] is_NAN_A;
 wire                  is_INF_A;
 wire                  is_ZERO_A;
 
+wire [1          : 0] denorm_AB;
+
 operand_analyzer
 #(
-        .DATA_W         (DATA_W     )
+        .DATA_W         (DATA_W      )
 ) operand_A
 (
-        .digit          (op1        ),
-        .exp            (exp_A      ),
-        .mant           (mant_A     ),
-        .op_val         (is_op_val_A),
-        .NANs           (is_NAN_A   ),
-        .INF            (is_INF_A   ),
-        .ZERO           (is_ZERO_A  )
+        .digit          (op1         ),
+        .exp            (exp_A       ),
+        .mant           (mant_A      ),
+        .op_val         (is_op_val_A ),
+        .NANs           (is_NAN_A    ),
+        .INF            (is_INF_A    ),
+        .ZERO           (is_ZERO_A   ),
+        .DENORM         (denorm_AB[1])
 
 );
 
@@ -49,16 +53,17 @@ wire                  is_ZERO_B;
 
 operand_analyzer
 #(
-        .DATA_W         (DATA_W     )
+        .DATA_W         (DATA_W      )
 ) operand_B
 (
-        .digit          (op2        ),
-        .exp            (exp_B      ),
-        .mant           (mant_B     ),
-        .op_val         (is_op_val_B),
-        .NANs           (is_NAN_B   ),
-        .INF            (is_INF_B   ),
-        .ZERO           (is_ZERO_B  )
+        .digit          (op2         ),
+        .exp            (exp_B       ),
+        .mant           (mant_B      ),
+        .op_val         (is_op_val_B ),
+        .NANs           (is_NAN_B    ),
+        .INF            (is_INF_B    ),
+        .ZERO           (is_ZERO_B   ),
+        .DENORM         (denorm_AB[0])
 
 );
 
@@ -117,6 +122,7 @@ exp_sum exp_sum
 (
         .exp_A          (exp_A     ),
         .exp_B          (exp_B     ),
+        .denorm_AB      (denorm_AB ),
         .exp_res        (exp_res   )
 );
 
@@ -129,6 +135,7 @@ reg [9          : 0] exp_res_1ST;
 reg [5          : 0] prev_res_1ST;
 reg [1          : 0] rounding_mode_1ST;
 reg [1          : 0] op_NAN_1ST;
+reg [1          : 0] denorm_AB_1ST;
 
 
 always @(posedge clk) begin
@@ -143,6 +150,8 @@ always @(posedge clk) begin
         rounding_mode_1ST <= r_mode;
 
         op_NAN_1ST        <= {|is_NAN_A, |is_NAN_B};
+
+        denorm_AB_1ST     <= denorm_AB;
 end
 
 wire [7:0] denorm_shift;
@@ -181,7 +190,7 @@ reg [2*(DATA_W - 8) - 1 : 0] prev_mant_res_2ST;
 reg [1                  : 0] op_NAN_2ST;
 reg [22                 : 0] mant_A_2ST;
 reg [22                 : 0] mant_B_2ST;
-
+reg [1                  : 0] denorm_AB_2ST;
 
 
 always @(posedge clk) begin
@@ -202,10 +211,12 @@ always @(posedge clk) begin
         mant_A_2ST        <= mant_A_1ST;
 
         mant_B_2ST        <= mant_B_1ST;
+
+        denorm_AB_2ST     <= denorm_AB_1ST;
 end
 
 wire [2*(DATA_W - 8) - 1         : 0] mant_norm;
-wire [$clog2(2*(DATA_W - 8)) - 1 : 0] leading_zero_num;
+wire [7                          : 0] leading_zero_num;
 wire                                  exp_incr;
 wire                                  not_full_norm;
 
@@ -217,12 +228,13 @@ normalization_module
         .vector                 (prev_mant_res_2ST),
         .exp_condition          (exp_condition_2ST),
         .denorm_shift           (denorm_shift_2ST ),
-        .exp_change_pose        (exp_change_pose  ),
         .exp_res_tmp            (exp_res_2ST      ),
         .out                    (mant_norm        ),
         .leading_zero_num       (leading_zero_num ),
         .exp_incr               (exp_incr         ),
+        .denorm_AB              (denorm_AB_2ST    ),
         .mant_shift(mant_shift),
+        .a(a),
         .not_full_norm          (not_full_norm    )
 );
 
@@ -262,14 +274,13 @@ exp_res_form
         .leading_zero_num       (leading_zero_num   ),
         .exp_incr               (exp_incr           ),
         .not_full_norm          (not_full_norm      ),
-        .mant_overfl            (mant_overfl        ),
-        .exp_change_pose        (exp_change_pose    ),
+        .denorm_AB              (denorm_AB_2ST      ),
         .exp_fin                (exp_fin            )
 );
 
 
-assign result = {32{|prev_res_2ST[3 : 2]}} & {prev_res_2ST[3], exp_fin, mant_rounded} | 
-                                             {prev_res_2ST[5], exp_fin, mant_rounded} ;
+assign result = {32{|prev_res_2ST[3 : 2]}} & {prev_res_2ST[3], exp_fin, mant_rounded              } |
+                                             {prev_res_2ST[5], exp_fin + mant_overfl, mant_rounded} ;
 assign val    =  prev_res_2ST[4];
 
 endmodule

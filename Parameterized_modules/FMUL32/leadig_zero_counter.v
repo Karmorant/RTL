@@ -4,10 +4,10 @@ module leading_zero_counter
 )
 (
         input  wire [DATA_W - 1        : 0] vector,
-        output wire [$clog2(DATA_W) - 1: 0] zero_num
+        output wire [7                 : 0] zero_num
 );
 
-wire [$clog2(DATA_W): 0] counter [DATA_W - 1 : 0];
+wire [7 : 0] counter [DATA_W - 1 : 0];
 
 genvar i;
 generate for (i = 0; i < DATA_W; i = i + 1)

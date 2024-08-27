@@ -71,50 +71,36 @@ int main() {
         srand(time(NULL));
 
 
-        FILE *fp = fopen("tests.txt", "w");
-        FILE *fp_res = fopen("res_eth.txt", "w");
-
-        uint32_t single32_1 = 0x2E893282;        
-        uint32_t single32_2 = 0x759241CC;
+        FILE *fp_arg1 = fopen("arg_1.txt", "w");
+        FILE *fp_arg2 = fopen("arg_2.txt", "w");
+        FILE *fp_res  = fopen("res.txt", "w");
 
 
-        float numf_1 = single32_to_float(single32_1);
-        float numf_2 = single32_to_float(single32_2);
-
-        //float numf_1 = -0.34782;
-        //float numf_2 = 9238123;
-        float fl_res = numf_1 * numf_2;
-
-        //uint32_t single32_1 = float_to_single32(numf_1);        
-        //uint32_t single32_2 = float_to_single32(numf_2);
-
-        // for(int i = 0; i < 1000; i++) {
-
-        //         uint32_t single32_1 = (uint32_t)rand();
-        //         uint32_t single32_2 = (uint32_t)rand();
-
-        //         float numf_1 = single32_to_float(single32_1);
-        //         float numf_2 = single32_to_float(single32_2);
-
-        //         float fl_res = numf_1 * numf_2;
-        //         uint32_t single32_res = float_to_single32(fl_res);
-
-        //         srand(time(NULL) + i + 1);
-        //         printf("Число в формате SINGLE32 %d: 0x%08X\n", i, single32_res);
-        //         print_binary(single32_res, fp_res);
-        //         print_binary_2arg(single32_1, single32_2, fp);
-        // }
-        uint32_t single32_res = float_to_single32(fl_res);
-    
-
-        printf("%f\n", numf_1);
-        printf("%f\n", numf_2);
-
-        printf("Число в формате SINGLE32 (IEEE 754): 0x%08X\n", single32_res);
 
 
-        printf("Двоичный формат:\n");
-        fclose(fp);
+        for(int i = 0; i < 5000; i++) {
+
+                uint32_t single32_1 = (uint32_t)rand();
+                uint32_t single32_2 = (uint32_t)rand();
+
+                fprintf(fp_arg1, "%08X\n", single32_1);
+                fprintf(fp_arg2, "%08X\n", single32_2);
+
+
+
+                float numf_1 = single32_to_float(single32_1);
+                float numf_2 = single32_to_float(single32_2);
+
+                float fl_res = numf_1 * numf_2;
+                uint32_t single32_res = float_to_single32(fl_res);
+                fprintf(fp_res, "%08X\n", single32_res);
+                srand(time(NULL) + i + 1);
+
+        }
+
+        fclose(fp_arg1);
+        fclose(fp_arg2);
+        fclose(fp_res);
 
         return 0;
 }
