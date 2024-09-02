@@ -9,9 +9,9 @@ wire clk, reset;
 
 sys_sig sys_sig (clk, reset);
 
-reg [31:0] op1_f [4999 : 0];
-reg [31:0] op2_f [4999 : 0];
-reg [31:0] res_eth_f [4999 : 0];
+reg [31:0] op1_f [999999 : 0];
+reg [31:0] op2_f [999999 : 0];
+reg [31:0] res_eth_f [999999 : 0];
 
 initial $readmemh("arg_1.txt", op1_f);
 initial $readmemh("arg_2.txt", op2_f);
@@ -52,7 +52,7 @@ integer i = 0;
 initial begin
 
 #5;
-for (i = 0; i < 5000; i = i + 1) begin
+for (i = 0; i < 1000000; i = i + 1) begin
 
         res_eth <= res_eth_f[i];
         #2;
@@ -72,7 +72,7 @@ initial
 begin
     $dumpfile("out.vcd");
     $dumpvars(0, fmul_top);
-    #50000;
+    #2100000;
     $display ("SUCCESS");
 
     $finish();

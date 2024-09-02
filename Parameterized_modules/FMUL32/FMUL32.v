@@ -10,8 +10,6 @@ module FMUL32
         input  wire [$clog2(OPERATION_NUM) - 1 : 0] opc,
         input  wire [1                         : 0] r_mode,
         output wire [31                        : 0] result,
-        output wire [9 : 0] mant_shift,
-        output wire [4 : 0] a,
         output wire                                 val
 
 
@@ -232,10 +230,7 @@ normalization_module
         .out                    (mant_norm        ),
         .leading_zero_num       (leading_zero_num ),
         .exp_incr               (exp_incr         ),
-        .denorm_AB              (denorm_AB_2ST    ),
-        .mant_shift(mant_shift),
-        .a(a),
-        .not_full_norm          (not_full_norm    )
+        .denorm_AB              (denorm_AB_2ST    )
 );
 
 wire [22 : 0] mant_rounded;
@@ -273,7 +268,6 @@ exp_res_form
         .exp_condition          (exp_condition_2ST  ),
         .leading_zero_num       (leading_zero_num   ),
         .exp_incr               (exp_incr           ),
-        .not_full_norm          (not_full_norm      ),
         .denorm_AB              (denorm_AB_2ST      ),
         .exp_fin                (exp_fin            )
 );

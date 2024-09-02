@@ -78,7 +78,7 @@ int main() {
 
 
 
-        for(int i = 0; i < 5000; i++) {
+        for(int i = 0; i < 1000000; i++) {
 
                 uint32_t single32_1 = (uint32_t)rand();
                 uint32_t single32_2 = (uint32_t)rand();

@@ -10,8 +10,8 @@ module exp_sum_analiz
 
 
 
-assign denorm_shift  =  (prev_denorm & ~(|exp_res_tmp[7:0])) ?   8'b1                         :
-                        (prev_denorm                       ) ? ~(exp_res_tmp[7:0] - 1) + 1'b1 : 0;
+assign denorm_shift  =  (prev_denorm & ~(|exp_res_tmp[7:0])) ?   8'b0                  :
+                        (prev_denorm                       ) ? ~(exp_res_tmp[7:0] - 1) : 0;
 
 assign prev_inf      = ~(|exp_res_tmp[9:8]) & &exp_res_tmp[7:0];
 
