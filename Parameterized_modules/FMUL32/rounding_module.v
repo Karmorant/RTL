@@ -7,8 +7,6 @@ module rounding_module
         input  wire [1          : 0] rouding_mode,
         input  wire [MANT_W - 1 : 0] data,
         input  wire [1          : 0] op_NAN,
-        input  wire [22         : 0] mant_A,
-        input  wire [22         : 0] mant_B,
         output wire [22         : 0] mant,
         output wire                  mant_overfl 
 );
@@ -23,9 +21,7 @@ wire mant_incr    = guard_bit & (rounding_bit | sticky_bit);
 
 assign mant_overfl =    (&data[MANT_W - 2 : MANT_W - 1 - 23]) & mant_incr;
 
-assign mant        =    (op_NAN == 2'b01      ) ? {1'b1, mant_B[21 : 0]}                         : 
-                        (op_NAN == 2'b10      ) ? {1'b1, mant_A[21 : 0]}                         :
-                        (op_NAN == 2'b11      ) ? {1'b1, mant_A[21 : 0]}                         : 
+assign mant        =    (op_NAN               ) ? {1'b1, data[MANT_W - 2 : MANT_W - 1 - 22]}     :  
                         (mant_overfl          ) ? {1'b1, 23'b0}                                  :
                         {24{rouding_mode == 1}} & data[MANT_W - 2 : MANT_W - 1 - 23]             |
                         {24{rouding_mode == 2}} & data[MANT_W - 2 : MANT_W - 1 - 23] + ~sign_bit |

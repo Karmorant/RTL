@@ -8,6 +8,7 @@ module normalization_module
         input  wire [7                  : 0] denorm_shift,
         input  wire [7                  : 0] exp_res_tmp,
         input  wire [1                  : 0] denorm_AB,
+        input  wire [1                  : 0] op_NAN,
         output wire [MANT_W - 1         : 0] out,
         output wire [7                  : 0] leading_zero_num,
         output wire                          exp_incr
@@ -30,7 +31,8 @@ leading_zero_counter
 assign exp_incr         = (vector[MANT_W - 1 : MANT_W - 2] > 1);
 
 
-assign mant_shift = (|exp_condition                                                                 ) ? {1'b0, 8'd48                                                } :
+assign mant_shift = (op_NAN                                                                         ) ?  9'b0                                                         :
+                    (|exp_condition                                                                 ) ? {1'b0, 8'd48                                                } :
 
                     (leading_zero_num > 1 && leading_zero_num - 1'b1 >  exp_res_tmp && !denorm_shift) ? {1'b1, exp_res_tmp + denorm_AB[1] + denorm_AB[0]            } :
                     (leading_zero_num > 1 && leading_zero_num - 1'b1 <= exp_res_tmp && !denorm_shift) ? {1'b1, leading_zero_num - 1'b1 + denorm_AB[1] + denorm_AB[0]} :

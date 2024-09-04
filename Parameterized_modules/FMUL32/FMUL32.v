@@ -175,6 +175,7 @@ mant_mul
 (
         .mant_A         (mant_A_1ST   ),
         .mant_B         (mant_B_1ST   ),
+        .op_NAN         (op_NAN_1ST   ),
         .prev_mant_res  (prev_mant_res)
 );
 
@@ -186,8 +187,6 @@ reg [7                  : 0] denorm_shift_2ST;
 reg [1                  : 0] exp_condition_2ST;
 reg [2*(DATA_W - 8) - 1 : 0] prev_mant_res_2ST;
 reg [1                  : 0] op_NAN_2ST;
-reg [22                 : 0] mant_A_2ST;
-reg [22                 : 0] mant_B_2ST;
 reg [1                  : 0] denorm_AB_2ST;
 
 
@@ -206,10 +205,6 @@ always @(posedge clk) begin
 
         op_NAN_2ST        <= op_NAN_1ST;
 
-        mant_A_2ST        <= mant_A_1ST;
-
-        mant_B_2ST        <= mant_B_1ST;
-
         denorm_AB_2ST     <= denorm_AB_1ST;
 end
 
@@ -227,10 +222,11 @@ normalization_module
         .exp_condition          (exp_condition_2ST),
         .denorm_shift           (denorm_shift_2ST ),
         .exp_res_tmp            (exp_res_2ST      ),
+        .denorm_AB              (denorm_AB_2ST    ),
+        .op_NAN                 (op_NAN_2ST       ),
         .out                    (mant_norm        ),
         .leading_zero_num       (leading_zero_num ),
-        .exp_incr               (exp_incr         ),
-        .denorm_AB              (denorm_AB_2ST    )
+        .exp_incr               (exp_incr         )
 );
 
 wire [22 : 0] mant_rounded;
@@ -243,8 +239,6 @@ rounding_module
 (
         .sign_bit               (prev_res_2ST[5]  ),
         .rouding_mode           (rounding_mode_2ST),
-        .mant_A                 (mant_A_2ST       ),
-        .mant_B                 (mant_B_2ST       ),
         .op_NAN                 (op_NAN_2ST       ),
         .data                   (mant_norm        ),
         .mant                   (mant_rounded     ),
