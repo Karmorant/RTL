@@ -12,8 +12,8 @@ module master
         input  wire [1             : 0] marker_pos,
         input  wire [PACK_SIZE - 1 : 0] buffer_in,
         output wire                     valid,
-        output reg  [PACK_SIZE - 1 : 0] data_out,
-        output reg                      last
+        output wire [PACK_SIZE - 1 : 0] data_out,
+        output wire                     last
 );
 
 
@@ -25,8 +25,7 @@ wire [PACK_SIZE                   - 1 : 0] data;
 wire                                       handshake;
 wire                                       val;
 
-assign valid     = ~reset & val | ((marker_pos == 2'b11) & (transmit + 1'b1 == 1) |
-                                   (marker_pos == 2'b10) & val                    |
+assign valid     = ~reset & val | ((marker_pos == 2'b10) & val                    |
                                    (marker_pos == 2'b01) & (transmit + 1'b1 == 1) );
 assign handshake = valid & ready;
 assign marker    = {MARK_SIZE{1'b1}};
@@ -48,16 +47,23 @@ FIFO_buffer
 );
 
 
+assign last = (counter == BUFF_SIZE - 1);
+
+
+assign data_out =   {PACK_SIZE{marker_pos == 2'b00                                     }} & data   |
+                    {PACK_SIZE{marker_pos == 2'b01 && transmit == (MARK_SIZE/PACK_SIZE)}} & marker |
+                    {PACK_SIZE{marker_pos == 2'b01 && transmit != (MARK_SIZE/PACK_SIZE)}} & data   |
+                    {PACK_SIZE{marker_pos == 2'b10 && transmit == 0                    }} & marker |
+                    {PACK_SIZE{marker_pos == 2'b10 && transmit != 0                    }} & data   ;
+
 
 always @(posedge clk) begin
         transmit <= (reset                     ) ? {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b00                       }} & 0*(MARK_SIZE/PACK_SIZE) |
-                                                   {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b01 || marker_pos == 2'b10}} & 1*(MARK_SIZE/PACK_SIZE) |
-                                                   {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b11                       }} & 2*(MARK_SIZE/PACK_SIZE) :
+                                                   {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b01 || marker_pos == 2'b10}} & 1*(MARK_SIZE/PACK_SIZE) :
                     (handshake && transmit     ) ? transmit - 1                                                                                              :
                     (handshake && transmit == 0) ? {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b00                       }} & 0*(MARK_SIZE/PACK_SIZE) |
-                                                   {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b01 || marker_pos == 2'b10}} & 1*(MARK_SIZE/PACK_SIZE) |
-                                                   {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b11                       }} & 2*(MARK_SIZE/PACK_SIZE) :
-                                                   transmit                                                               ;
+                                                   {($clog2(MARK_SIZE/PACK_SIZE) + 2){marker_pos == 2'b01 || marker_pos == 2'b10}} & 1*(MARK_SIZE/PACK_SIZE) :
+                                                   transmit                                                                                                  ;
 
 end
 
@@ -69,28 +75,13 @@ always @(posedge clk) begin
 
 end
 
-always @(posedge clk) begin
-        last <= (counter == BUFF_SIZE - 1);
-end
-
-always @(posedge clk && handshake) begin
-        data_out <= {PACK_SIZE{marker_pos == 2'b00                                     }} & data   |
-                    {PACK_SIZE{marker_pos == 2'b01 && transmit != (MARK_SIZE/PACK_SIZE)}} & marker |
-                    {PACK_SIZE{marker_pos == 2'b01 && transmit == (MARK_SIZE/PACK_SIZE)}} & data   |
-                    {PACK_SIZE{marker_pos == 2'b10 && transmit != 0                    }} & marker |
-                    {PACK_SIZE{marker_pos == 2'b10 && transmit == 0                    }} & data   |
-                    {PACK_SIZE{marker_pos == 2'b11 && transmit != (MARK_SIZE/PACK_SIZE)}} & marker |
-                    {PACK_SIZE{marker_pos == 2'b11 && transmit == (MARK_SIZE/PACK_SIZE)}} & data   ;
-end
 
 always @(posedge clk) begin
         read <= (handshake) ?       {marker_pos == 2'b00                                     }        |
                                     {marker_pos == 2'b01 && transmit != (MARK_SIZE/PACK_SIZE)} & 1'b0 |
                                     {marker_pos == 2'b01 && transmit == (MARK_SIZE/PACK_SIZE)}        |
                                     {marker_pos == 2'b10 && transmit != 0                    } & 1'b0 |
-                                    {marker_pos == 2'b10 && transmit == 0                    }        |
-                                    {marker_pos == 2'b11 && transmit != (MARK_SIZE/PACK_SIZE)} & 1'b0 |
-                                    {marker_pos == 2'b11 && transmit == (MARK_SIZE/PACK_SIZE)}        :
+                                    {marker_pos == 2'b10 && transmit == 0                    }        :
                                                                                                  1'b0 ;
 end
 

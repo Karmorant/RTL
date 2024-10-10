@@ -47,7 +47,7 @@ always @(posedge clk) begin
         read_ptr <= 0;
         else begin
                 if (read_perm)
-                read_ptr <= (read_ptr == FIFO_SIZE - 1) ? 'h0 : read_ptr + 1'b1;
+                        read_ptr <= (read_ptr == FIFO_SIZE - 1) ? 'h0 : read_ptr + 1'b1;
                 else if (rd_wr_perm) begin
                         read_ptr <= (read_ptr == write_ptr) ? read_ptr : read_ptr + 1'b1;
                 end 
@@ -59,7 +59,7 @@ always @(posedge clk) begin
         write_ptr <= 0;
         else begin
                 if (write_perm)
-                write_ptr <= (write_ptr == FIFO_SIZE - 1) ? 'h0 : write_ptr + 1'b1;
+                        write_ptr <= (write_ptr == FIFO_SIZE - 1) ? 'h0 : write_ptr + 1'b1;
                 else if (rd_wr_perm) begin
                         write_ptr <= (read_ptr == write_ptr) ? write_ptr : write_ptr + 1'b1;
                 end 

@@ -1,5 +1,5 @@
 $date
-	Thu Oct 10 11:31:36 2024
+	Thu Oct 10 14:55:30 2024
 $end
 $version
 	Icarus Verilog
@@ -17,18 +17,18 @@ $var reg 1 & write $end
 $scope module DUT $end
 $var wire 8 ' buffer_in [7:0] $end
 $var wire 1 " clk $end
-$var wire 1 ( handshake $end
-$var wire 8 ) marker [7:0] $end
-$var wire 2 * marker_pos [1:0] $end
+$var wire 8 ( data_out [7:0] $end
+$var wire 1 ) handshake $end
+$var wire 8 * marker [7:0] $end
+$var wire 2 + marker_pos [1:0] $end
 $var wire 1 $ ready $end
 $var wire 1 % reset $end
-$var wire 1 + valid $end
+$var wire 1 , valid $end
 $var wire 1 & write $end
-$var wire 1 , val $end
-$var wire 8 - data [7:0] $end
-$var reg 4 . counter [3:0] $end
-$var reg 8 / data_out [7:0] $end
-$var reg 1 0 last $end
+$var wire 1 - val $end
+$var wire 1 . last $end
+$var wire 8 / data [7:0] $end
+$var reg 4 0 counter [3:0] $end
 $var reg 1 1 read $end
 $var reg 2 2 transmit [1:0] $end
 $scope module FIFO $end
@@ -41,7 +41,7 @@ $var wire 1 6 read_perm $end
 $var wire 1 % reset $end
 $var wire 1 & write $end
 $var wire 1 7 write_perm $end
-$var wire 1 , val $end
+$var wire 1 - val $end
 $var wire 1 8 full $end
 $var reg 4 9 counter [3:0] $end
 $var reg 3 : read_ptr [2:0] $end
@@ -63,40 +63,42 @@ bx 4
 bx 3
 bx 2
 x1
-x0
+bx 0
 bx /
-bx .
-bx -
+x.
+x-
 x,
-0+
-b0 *
-b11111111 )
-0(
+b11 +
+b11111111 *
+0)
+bx (
 bx '
 1&
 1%
 0$
-b0 #
+b11 #
 0"
 bx !
 $end
 #1000
+0,
+b11111111 (
 17
 05
 06
-0,
+0-
 08
 b0 9
 b0 :
 b0 ;
-b0 2
-b0 .
+b11 2
+0.
+b0 0
 01
 1"
 #2000
 0"
 #3000
-00
 1"
 #4000
 0"
@@ -113,11 +115,11 @@ b0 .
 #10000
 0"
 #11000
-1+
-b11011111 -
+1,
+b11011111 /
 b11011111 4
 b1 ;
-1,
+1-
 b1 9
 1"
 b11011111 !
@@ -129,7 +131,6 @@ b11011111 3
 #13000
 b10 9
 b10 ;
-b11011111 /
 1"
 b0 !
 b0 '
@@ -201,100 +202,131 @@ b1111 3
 #40000
 0"
 #41000
-16
-b1 .
-11
-1(
+b10 2
+1)
 1"
 1$
 #42000
 0"
 #43000
-b10 .
-b0 -
-b0 4
-b1 :
-b11 9
+b11011111 (
+b1 2
 1"
 #44000
 0"
 #45000
-b10 9
-b11110000 -
-b11110000 4
-b10 :
-b11 .
-b0 /
+b11111111 (
+16
+b0 2
+11
 1"
 #46000
 0"
 #47000
-b11110000 /
-b100 .
-b1111 -
-b1111 4
-b11 :
-b1 9
+06
+01
+b1 0
+b11 2
+b0 /
+b0 4
+b1 :
+b11 9
 1"
 #48000
 0"
 #49000
-0(
-0+
-06
-0,
-b0 9
-bx -
-bx 4
-b100 :
-b101 .
-b1111 /
+b10 2
 1"
 #50000
 0"
 #51000
-01
-bx /
+b0 (
+b1 2
 1"
 #52000
 0"
 #53000
+b11111111 (
+16
+b0 2
+11
 1"
 #54000
 0"
 #55000
+06
+01
+b10 0
+b11 2
+b11110000 /
+b11110000 4
+b10 :
+b10 9
 1"
 #56000
 0"
 #57000
+b10 2
 1"
 #58000
 0"
 #59000
+b11110000 (
+b1 2
 1"
 #60000
 0"
 #61000
+b11111111 (
+16
+b0 2
+11
 1"
 #62000
 0"
 #63000
+06
+01
+b11 0
+b11 2
+b1111 /
+b1111 4
+b11 :
+b1 9
 1"
 #64000
 0"
 #65000
+b10 2
 1"
 #66000
 0"
 #67000
+b1111 (
+b1 2
 1"
 #68000
 0"
 #69000
+b11111111 (
+16
+b0 2
+11
 1"
 #70000
 0"
 #71000
+0)
+0,
+06
+01
+b100 0
+b11 2
+bx /
+bx 4
+b100 :
+0-
+b0 9
 1"
 #72000
 0"
