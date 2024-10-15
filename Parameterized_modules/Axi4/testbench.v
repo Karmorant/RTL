@@ -2,31 +2,34 @@
 
 
 module testbench;
-reg clk;
-reg reset;
-reg write;
-reg ready;
-reg [1 : 0] marker_pos;
-reg [7 : 0] buffer_in;
+reg                      clk;
+reg                      reset;
+reg [8          - 1 : 0] s_tdata;
+reg                      s_tvalid;
+reg                      s_tlast;
+reg [32         - 1 : 0] marker;
+reg                      m_tready;
 
 
 initial begin
         clk = 0;
         reset = 1;
-        marker_pos = 2'b00;
-        write = 1;
-        ready = 0;
+        marker = 32'hFFFFFFFF;
+        m_tready = 1;
+        s_tlast = 0;
+        s_tvalid = 0;
 end
 always #1 clk = ~clk;
 
 
-master #(.PACK_SIZE(8), .MARK_SIZE(8)) DUT (
+Axi4_stream #(.DATA_W(8), .LEN(4)) DUT (
         .clk(clk),
         .reset(reset),
-        .write(write),
-        .ready(ready),
-        .buffer_in(buffer_in),
-        .marker_pos(marker_pos)
+        .s_tdata(s_tdata),
+        .s_tvalid(s_tvalid),
+        .s_tlast(s_tlast),
+        .marker(marker),
+        .m_tready(m_tready)
 );
 
 
@@ -38,22 +41,44 @@ initial begin
         $dumpvars(0, testbench);
         #11;
         reset = 0;
-        
-        buffer_in = 8'b11011111;
+        #10;
+        s_tvalid = 1;
+        s_tdata = $random;
         #2;
-        buffer_in = 8'b00000000;
+        s_tdata = $random;
         #2;
-        buffer_in = 8'b11110000;
+        s_tdata = $random;
         #2;
-        buffer_in = 8'b00001111;
+        s_tdata = $random;
         #2;
-        write = 0;
-        #20;
+        s_tdata = $random;
         #2;
-        ready = 1;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        #2;
+        m_tready = 0;
         #2;
         #2;
-
+        #2;
+        m_tready = 1;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        #2;
+        s_tdata = $random;
+        s_tlast = 1;
+        #2;
+        s_tvalid = 0;   
+        s_tlast = 0;
         #1000;
 
         $finish;
